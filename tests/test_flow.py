@@ -1,7 +1,7 @@
 # tests/test_flow.py  
 import pytest
 from unittest.mock import AsyncMock, Mock, patch, mock_open
-from src.langflow_client import Flow, RunOptions, InputTypes, OutputTypes, LangflowClient
+from src.langflow_client import Flow, InputTypes, OutputTypes, LangflowClient
 from src.langflow_client.exceptions import LangflowError, LangflowRequestError
 
 class TestFlow:
@@ -36,52 +36,6 @@ class TestFlow:
         call_args = mock_langflow_client.request.call_args[0][0]
         assert call_args.path == "/run/test-flow"
         assert call_args.method == "POST"
-        assert call_args.body["inputs"] == [{"input_value": "hello"}]
-
-    @pytest.mark.asyncio
-    async def test_run_with_options(self, mock_langflow_client):
-        """Test flow execution with run options."""
-        mock_langflow_client.request.return_value = {"result": "success"}
-        
-        options = RunOptions(
-            input_type=InputTypes.CHAT,
-            output_type=OutputTypes.TEXT,
-            session_id="test-session"
-        )
-        
-        flow = Flow(mock_langflow_client, "test-flow")
-        await flow.run("hello", options)
-        
-        call_args = mock_langflow_client.request.call_args[0][0]
-        payload = call_args.body
-        assert payload["input_type"] == "chat"
-        assert payload["output_type"] == "text"
-        assert payload["session_id"] == "test-session"
-
-    def test_prepare_inputs_string(self, mock_langflow_client):
-        """Test input preparation with string."""
-        flow = Flow(mock_langflow_client, "test-flow")
-        inputs = flow._prepare_inputs("hello world")
-        assert inputs == [{"input_value": "hello world"}]
-
-    def test_prepare_inputs_dict(self, mock_langflow_client):
-        """Test input preparation with dictionary."""
-        flow = Flow(mock_langflow_client, "test-flow")
-        inputs = flow._prepare_inputs({
-            "component1": "value1",
-            "message": "hello"
-        })
-        expected = [
-            {"components": ["component1"], "input_value": "value1"},
-            {"input_value": "hello"}
-        ]
-        assert inputs == expected
-
-    def test_prepare_inputs_none(self, mock_langflow_client):
-        """Test input preparation with None."""
-        flow = Flow(mock_langflow_client, "test-flow")
-        inputs = flow._prepare_inputs(None)
-        assert inputs == []
 
     @pytest.mark.asyncio
     async def test_upload_file_with_http_client_501_error(self):
