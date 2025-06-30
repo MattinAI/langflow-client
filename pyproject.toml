@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=64.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,10 +9,7 @@ description = "Async Python client library for interacting with Langflow API ser
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Adrián Noya", email = "your.email@example.com"}
-]
-maintainers = [
-    {name = "Adrián Noya", email = "your.email@example.com"}
+    {name = "Adrián Noya", email = "anoya@ikerlan.es"}
 ]
 keywords = ["langflow", "client", "api", "ai", "llm", "async", "python"]
 classifiers = [
@@ -20,21 +17,19 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Typing :: Typed",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "httpx>=0.24.0",
-    "pydantic>=2.0.0",
+    "pydantic>=2.11.0",
     "aiofiles>=24.1.0",
     "typing-extensions>=4.0.0;python_version<'3.10'",
 ]
@@ -58,11 +53,7 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/langflow-python-client"
-Repository = "https://github.com/yourusername/langflow-python-client"
-Documentation = "https://langflow-python-client.readthedocs.io"
-"Bug Tracker" = "https://github.com/yourusername/langflow-python-client/issues"
-Changelog = "https://github.com/yourusername/langflow-python-client/blob/main/CHANGELOG.md"
+Repository = "https://github.com/MattinAI/langflow-client"
 
 [tool.setuptools.packages.find]
 where = ["src"]
