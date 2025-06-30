@@ -18,8 +18,8 @@ class TestFlow:
         
         assert tweaked.flow_id == flow.flow_id
         assert tweaked.client == flow.client
-        assert hasattr(tweaked, '_tweaks')
-        assert tweaked._tweaks["OpenAI_1"]["model"] == "gpt-4"
+        assert hasattr(tweaked, 'tweaks')
+        assert tweaked.tweaks["OpenAI_1"]["model"] == "gpt-4"
 
     @pytest.mark.asyncio
     async def test_run_basic(self, mock_langflow_client):

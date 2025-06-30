@@ -45,7 +45,7 @@ class Flow:
             New Flow instance with tweaks
         """
         new_flow = Flow(self.client, self.flow_id)
-        new_flow._tweaks = Tweaks(tweaks)
+        new_flow.tweaks = Tweaks(tweaks)
         return new_flow
     
     async def run(

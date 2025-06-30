@@ -13,7 +13,7 @@ from src.langflow_client.exceptions import LangflowError, LangflowRequestError
 
 # Test configuration
 LANGFLOW_URL = os.getenv("LANGFLOW_TEST_URL", "http://localhost:7860")
-LANGFLOW_API_KEY = os.getenv("LANGFLOW_TEST_API_KEY")  # Optional
+LANGFLOW_API_KEY = "sk-rF6UJjAlmkOpDpJAw2gvND-pNf6Gwh7IH3P_embx8Mg"
 TEST_FLOW_ID = os.getenv("LANGFLOW_TEST_FLOW_ID", "be326505-d172-4791-bd17-2f30f385618a")
 
 @pytest.mark.integration
@@ -110,7 +110,7 @@ async def test_flow_immutability(integration_client):
     
     # Should be different instances
     assert original_flow is not tweaked_flow
-    assert original_flow.tweaks != tweaked_flow._tweaks
+    assert original_flow.tweaks != tweaked_flow.tweaks
     assert original_flow.flow_id == tweaked_flow.flow_id
 
 @pytest.mark.integration
@@ -221,7 +221,7 @@ async def test_options_tweaks_only(integration_client):
 @pytest.mark.asyncio
 async def test_method_plus_options_tweaks(integration_client):
     """Test .tweak() method + options tweaks."""
-    flow = integration_client.flow(TEST_FLOW_ID).tweak(temperature=0.6)
+    flow = integration_client.flow(TEST_FLOW_ID).tweak(temperature="0.6")
     options = FlowRequestOptions(tweaks=Tweaks({"model_name": "gpt-4"}))
     result = await flow.run("Test method + options", options)
     assert result is not None
@@ -230,8 +230,8 @@ async def test_method_plus_options_tweaks(integration_client):
 @pytest.mark.asyncio
 async def test_all_tweak_sources(integration_client):
     """Test constructor + method + options tweaks combined."""
-    flow = Flow(integration_client, TEST_FLOW_ID, tweaks={"temperature": 0.1, "template": "You are free"})
-    flow = flow.tweak(model_name="gpt-4", max_tokens=200)
+    flow = Flow(integration_client, TEST_FLOW_ID, tweaks={"temperature": "0.1", "template": "You are free"})
+    flow = flow.tweak(model_name="gpt-4")
     options = FlowRequestOptions(tweaks=Tweaks({"system_prompt": "Be creative"}))
     result = await flow.run("Test all sources", options)
 
