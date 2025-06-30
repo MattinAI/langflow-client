@@ -15,8 +15,7 @@ __email__ = "anoya@ikerlan.es"
 __license__ = "MIT"
 
 from .client import LangflowClient
-from .flow import Flow, RunOptions
-from .logs import LogsAPI
+from .flow import Flow, FlowRequestOptions
 from .models import LangflowClientOptions, RequestOptions, Tweaks
 from .exceptions import LangflowError, LangflowRequestError
 from .constants import InputTypes, OutputTypes
@@ -24,8 +23,7 @@ from .constants import InputTypes, OutputTypes
 __all__ = [
     "LangflowClient",
     "Flow",
-    "RunOptions",
-    "LogsAPI", 
+    "FlowRequestOptions",
     "LangflowClientOptions",
     "RequestOptions",
     "Tweaks",

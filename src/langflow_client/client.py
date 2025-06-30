@@ -9,7 +9,6 @@ from typing import Dict, Any, Optional, AsyncGenerator
 from .models import LangflowClientOptions, RequestOptions
 from .exceptions import LangflowError, LangflowRequestError
 from .flow import Flow
-from .logs import LogsAPI
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +47,6 @@ class LangflowClient:
             self.default_headers["User-Agent"] = self._get_user_agent()
             
         self.http_client = opts.http_client
-        self.logs = LogsAPI(self)  
     
     def _get_user_agent(self) -> str:
         """Generate User-Agent string."""

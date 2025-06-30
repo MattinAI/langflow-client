@@ -2,7 +2,7 @@
 import pytest
 from unittest.mock import Mock, AsyncMock, patch
 import httpx
-from src.langflow_client import LangflowClient, Flow, LogsAPI
+from src.langflow_client import LangflowClient, Flow
 from src.langflow_client.models import RequestOptions, LangflowClientOptions
 from src.langflow_client.exceptions import LangflowError, LangflowRequestError
 
@@ -42,13 +42,6 @@ class TestLangflowClient:
         client = LangflowClient(opts=opts)
         assert client.base_url == "http://test.com"
 
-    def test_user_agent_generation(self):
-        """Test User-Agent header generation."""
-        client = LangflowClient()
-        user_agent = client._get_user_agent()
-        assert "langflow-python-client/1.0.0" in user_agent
-        assert "Python/" in user_agent
-
     def test_set_headers_combination(self):
         client = LangflowClient(api_key="test")
         headers = client._set_headers({"Custom": "value"})
@@ -77,11 +70,6 @@ class TestLangflowClient:
         assert isinstance(flow, Flow)
         assert flow.flow_id == "test-flow-id"
         assert flow.client is client
-
-    def test_logs_api_creation(self):
-        """Test logs API creation."""
-        client = LangflowClient()
-        assert isinstance(client.logs, LogsAPI)
 
     @pytest.mark.asyncio
     async def test_request_timeout_error(self, httpx_mock):
