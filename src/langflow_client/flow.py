@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .client import LangflowClient
 
 
-class RunOptions:
+class FlowRequestOptions:
     """Options for running a flow."""
     def __init__(
         self,
@@ -19,21 +19,20 @@ class RunOptions:
         output_type: Optional[OutputTypes] = None,
         session_id: Optional[str] = None,
         tweaks: Optional[Tweaks] = None,
-        outputs: Optional[List[str]] = None
     ):
         self.input_type = input_type
         self.output_type = output_type
         self.session_id = session_id
         self.tweaks = tweaks or Tweaks()
-        self.outputs = outputs
 
 
 class Flow:
     """Represents a Langflow flow that can be executed."""
     
-    def __init__(self, client: 'LangflowClient', flow_id: str):
+    def __init__(self, client: 'LangflowClient', flow_id: str, tweaks: Optional[Dict[str, Any]] = None):
         self.client = client
         self.flow_id = flow_id
+        self.tweaks = tweaks or {}
     
     def tweak(self, **tweaks: Any) -> 'Flow':
         """
@@ -51,37 +50,39 @@ class Flow:
     
     async def run(
         self, 
-        inputs: Union[str, Dict[str, Any], None] = None,
-        options: Optional[RunOptions] = None
+        input_value: Union[str, Dict[str, Any], None] = None,
+        options: Optional[FlowRequestOptions] = None
     ) -> Any:
         """
         Run the flow with the given inputs.
         
         Args:
-            inputs: Input data for the flow (string or dict)
-            options: Run options including input/output types, session_id, etc.
+            inputs: Input text
+            options: Optional request options
             
         Returns:
             Flow execution result or async generator for streaming
         """
         if options is None:
-            options = RunOptions()
+            options = FlowRequestOptions()
         
+        # Combine instance tweaks with options tweaks
+        combined_tweaks = {**self.tweaks, **options.tweaks}
+
         payload = {
-            "inputs": self._prepare_inputs(inputs),
-            "tweaks": getattr(self, '_tweaks', options.tweaks)
+            "input_value": input_value,
+            "tweaks": combined_tweaks
         }
         
         if options.session_id:
             payload["session_id"] = options.session_id
-        if options.outputs:
-            payload["outputs"] = options.outputs
         if options.input_type:
             payload["input_type"] = options.input_type.value
         if options.output_type:
             payload["output_type"] = options.output_type.value
             
-        headers = {"Content-Type": "application/json"}
+        headers = {"Content-Type": "application/json", 
+                   "Accept": "application/json"}
         
         request_options = RequestOptions(
             path=f"/run/{self.flow_id}",
@@ -91,27 +92,6 @@ class Flow:
         )
         
         return await self.client.request(request_options)
-    
-    def _prepare_inputs(self, inputs: Union[str, Dict[str, Any], None]) -> List[Dict[str, Any]]:
-        """Prepare inputs in the format expected by the API."""
-        if inputs is None:
-            return []
-        
-        if isinstance(inputs, str):
-            return [{"input_value": inputs}]
-        elif isinstance(inputs, dict):
-            prepared_inputs = []
-            for key, value in inputs.items():
-                if key == "message" or key == "input_value":
-                    prepared_inputs.append({"input_value": value})
-                else:
-                    prepared_inputs.append({
-                        "components": [key],
-                        "input_value": value
-                    })
-            return prepared_inputs
-        else:
-            return [{"input_value": str(inputs)}]
     
     async def upload_file(self, file_path: str) -> Dict[str, str]:
         """
