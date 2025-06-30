@@ -188,3 +188,51 @@ class TestLangflowClient:
         
         result = await client.request(RequestOptions("/test", "GET"))
         assert result == "Plain text response"
+
+    @pytest.mark.asyncio
+    async def test_api_key_authentication_success(self, httpx_mock):
+        """Test successful API key authentication."""
+        client = LangflowClient(api_key="valid-api-key")
+        
+        httpx_mock.add_response(
+            method="GET",
+            url="http://localhost:7860/api/v1/test",
+            json={"result": "authenticated"},
+            status_code=200,
+            match_headers={"x-api-key": "valid-api-key"}
+        )
+        
+        result = await client.request(RequestOptions("/test", "GET"))
+        assert result == {"result": "authenticated"} 
+
+    @pytest.mark.asyncio  
+    async def test_api_key_authentication_failure(self, httpx_mock):
+        """Test API key authentication failure."""
+        client = LangflowClient(api_key="invalid-api-key")
+        
+        httpx_mock.add_response(
+            method="GET",
+            url="http://localhost:7860/api/v1/test",
+            json={"detail": "Invalid API key"},
+            status_code=401
+        )
+        
+        with pytest.raises(LangflowError) as exc_info:
+            await client.request(RequestOptions("/test", "GET"))
+        assert "Invalid API key" in str(exc_info.value)
+
+    @pytest.mark.asyncio
+    async def test_missing_api_key_on_protected_endpoint(self, httpx_mock):
+        """Test access to protected endpoint without API key."""
+        client = LangflowClient()  # No API key
+        
+        httpx_mock.add_response(
+            method="GET",
+            url="http://localhost:7860/api/v1/protected",
+            json={"detail": "API key required"},
+            status_code=401
+        )
+        
+        with pytest.raises(LangflowError) as exc_info:
+            await client.request(RequestOptions("/protected", "GET"))
+        assert "API key required" in str(exc_info.value)
