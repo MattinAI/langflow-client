@@ -10,7 +10,7 @@ run flows, stream responses, and handle authentication.
 """
 
 __version__ = "1.0.0"
-__author__ = "Adrián Noya"
+__author__ = "Adrián Noya Carro"
 __email__ = "anoya@ikerlan.es"
 __license__ = "MIT"
 
