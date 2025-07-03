@@ -7,7 +7,7 @@ name = "langflow-python-client"
 version = "1.0.0"
 description = "Async Python client library for interacting with Langflow API servers"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Mozilla Public License 2.0 (MPL 2.0)"}
 authors = [
     {name = "Adrián Noya Carro", email = "anoya@ikerlan.es"}
 ]
@@ -15,7 +15,7 @@ keywords = ["langflow", "client", "api", "ai", "llm", "async", "python"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
