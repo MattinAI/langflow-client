@@ -104,4 +104,4 @@ The client supports different input and output types depending on your Langflow 
 
 
 ### License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MPL License - see the LICENSE file for details.
