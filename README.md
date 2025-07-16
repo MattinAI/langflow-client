@@ -4,7 +4,7 @@ An async Python client library for interacting with Langflow API servers.
 
 [![PyPI version](https://badge.fury.io/py/langflow-python-client.svg)](https://badge.fury.io/py/langflow-python-client)
 [![Python Support](https://img.shields.io/pypi/pyversions/langflow-python-client.svg)](https://pypi.org/project/langflow-python-client/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MPL](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
 ## Features
 
