@@ -109,7 +109,8 @@ class Flow:
             async with aiofiles.open(file_path, 'rb') as file:
                 file_data = await file.read()
                 
-            files = {"file": (file_path.split('/')[-1], file_data)}
+            from pathlib import Path
+            files = {"file": (Path(file_path).name, file_data)}
             
             url = f"{self.client.base_url}{self.client.base_path}/files/upload/{self.flow_id}"
             
